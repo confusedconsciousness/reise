@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static com._xkishan.journal.utils.Utils.override;
+
 @RestController
 @RequestMapping("/journals") // sort of adds prefix
 public class JournalController {
@@ -67,10 +69,7 @@ public class JournalController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    private String override(String oldContent,
-                            String newContent) {
-        return (newContent == null || newContent.isEmpty()) ? oldContent : newContent;
-    }
+
 
 }
 
