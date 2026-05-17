@@ -22,6 +22,8 @@ public class UserEntry {
     private String userName;
     @NonNull
     private String password;
+
+    private List<String> roles = new ArrayList<>();
     // a way to link (one user many journal entries)
     @DBRef
     private List<JournalEntry> journalEntries = new ArrayList<>();

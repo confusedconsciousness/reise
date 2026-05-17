@@ -5,9 +5,9 @@ import com._xkishan.journal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static com._xkishan.journal.utils.Utils.override;
 
@@ -18,26 +18,28 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public ResponseEntity<List<UserEntry>> getAllUsers() {
-        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
-    }
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody UserEntry userEntry) {
 
-    @PostMapping
-    public ResponseEntity<UserEntry> createUser(@RequestBody UserEntry userEntry) {
-        return new ResponseEntity<>(userService.save(userEntry), HttpStatus.CREATED);
-    }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
 
-    @PutMapping("/{username}")
-    public ResponseEntity<?> updateUser(@PathVariable String username,
-                                        @RequestBody UserEntry userEntry) {
         UserEntry found = userService.findByUserName(username);
-        if (found != null) {
-            found.setUserName(override(username, userEntry.getUserName()));
-            found.setPassword(override(found.getPassword(), userEntry.getPassword()));
-            // overwrite
-            userService.save(found);
-        }
+
+        found.setUserName(override(username, userEntry.getUserName()));
+        found.setPassword(override(found.getPassword(), userEntry.getPassword()));
+        // overwrite
+        userService.save(found);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        userService.deleteByUserName(username);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
