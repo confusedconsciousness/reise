@@ -29,7 +29,7 @@ public class UserController {
         found.setUserName(override(username, userEntry.getUserName()));
         found.setPassword(override(found.getPassword(), userEntry.getPassword()));
         // overwrite
-        userService.save(found);
+        userService.saveNew(found);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

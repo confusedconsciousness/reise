@@ -19,9 +19,13 @@ public class UserService {
     private UserRepository userRepository;
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UserEntry save(UserEntry userEntry) {
+    public UserEntry saveNew(UserEntry userEntry) {
         userEntry.setPassword(Objects.requireNonNull(passwordEncoder.encode(userEntry.getPassword())));
-        userEntry.setRoles(List.of());
+        userEntry.setRoles(List.of("USER"));
+        return userRepository.save(userEntry);
+    }
+
+    public UserEntry save(UserEntry userEntry) {
         return userRepository.save(userEntry);
     }
 

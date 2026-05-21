@@ -24,8 +24,9 @@ public class SecurityConfig {
             throws
             Exception {
         return http.authorizeHttpRequests(r -> r.requestMatchers("/public/**").permitAll()
-                                                .requestMatchers("/journals/**").permitAll().requestMatchers("/users/**")
-                                                .authenticated().requestMatchers("/admin/**").hasRole("ADMIN")
+                                                .requestMatchers("/journals/**").authenticated()
+                                                .requestMatchers("/users/**").authenticated()
+                                                .requestMatchers("/admin/**").hasRole("ADMIN")
                                                 .anyRequest().authenticated()).httpBasic(Customizer.withDefaults())
                    .csrf(AbstractHttpConfigurer::disable).build();
     }
