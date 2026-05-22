@@ -14,6 +14,7 @@ public class UserServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+
     @ParameterizedTest
     @ValueSource(strings = {
             "ram",
